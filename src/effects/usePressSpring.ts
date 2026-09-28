@@ -1,6 +1,6 @@
 import { animate, useMotionValue, type MotionValue } from 'motion/react';
 import { useCallback, useRef } from 'react';
-import { prefersReducedMotion } from '../effects/reducedMotion';
+import { prefersReducedMotion } from './reducedMotion';
 
 /** Tuşun basılınca ineceği mesafe (px). Kalınlık kenarı 6px; basınca 1px kalır. */
 export const PRESS_DEPTH = 5;

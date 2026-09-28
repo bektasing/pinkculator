@@ -1,0 +1,42 @@
+.heart {
+  fill: #de8f9b;
+  opacity: 0.72;
+  animation: drift 4.2s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+}
+
+.star {
+  fill: #fffaf5;
+  filter: drop-shadow(0 0 2px rgba(255, 250, 245, 0.9));
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: twinkle 2.8s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+}
+
+@keyframes twinkle {
+  0%,
+  100% {
+    opacity: 0.95;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.4;
+    transform: scale(0.72);
+  }
+}
+
+@keyframes drift {
+  0%,
+  100% {
+    opacity: 0.72;
+  }
+  50% {
+    opacity: 0.45;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .heart,
+  .star {
+    animation: none;
+  }
+}

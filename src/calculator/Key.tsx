@@ -1,6 +1,6 @@
 import { motion } from 'motion/react';
 import { useRef, type PointerEvent, type ReactNode } from 'react';
-import { usePressSpring } from './usePressSpring';
+import { usePressSpring } from '../effects/usePressSpring';
 import styles from './Key.module.css';
 
 export type KeyVariant = 'num' | 'fn' | 'op';

@@ -1,0 +1,80 @@
+/* Ölçüler (390 px): kart 350 × 178, köşe 40, kalınlık 8, metin sol boşluğu 28 */
+.card {
+  --edge: 8px;
+  --radius: calc(40 * var(--u));
+  position: relative;
+  display: block;
+  flex: 1 1 0;
+  min-height: 0;
+  max-height: calc(178 * var(--u));
+  width: 100%;
+  text-align: left;
+  touch-action: none;
+  container-type: size;
+}
+
+.base {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: var(--edge);
+  bottom: 0;
+  border-radius: var(--radius);
+  background: var(--key-num-edge);
+  background-image: linear-gradient(0deg, rgba(122, 63, 69, 0.1), transparent 8px);
+  box-shadow:
+    0 16px 24px -8px rgba(201, 110, 124, 0.5),
+    0 5px 9px -3px rgba(201, 110, 124, 0.35),
+    -8px 12px 20px -10px rgba(201, 110, 124, 0.45);
+}
+
+.face {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: calc(100% - var(--edge));
+  border-radius: var(--radius);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  background:
+    radial-gradient(90% 90% at 30% 20%, #fffdf8 0%, transparent 70%),
+    linear-gradient(180deg, #fffaf2 0%, var(--card) 50%, var(--key-num-bottom) 100%);
+  box-shadow:
+    inset 0 3px 3px -1px rgba(255, 252, 248, 1),
+    inset 0 -14px 18px -9px rgba(188, 148, 124, 0.42),
+    inset 10px 0 14px -10px rgba(255, 252, 248, 0.8),
+    inset -12px 0 16px -10px rgba(188, 148, 124, 0.35);
+  will-change: transform;
+}
+
+.text {
+  display: flex;
+  flex-direction: column;
+  padding-left: calc(28 * var(--u));
+  min-width: 0;
+}
+
+.title {
+  color: var(--ink);
+  font-size: min(calc(30 * var(--u)), 18cqh);
+  font-weight: var(--weight-extrabold);
+  line-height: 1.19;
+  letter-spacing: -0.005em;
+}
+
+.record {
+  margin-top: min(calc(5 * var(--u)), 3cqh);
+  color: var(--ink-soft);
+  font-size: min(calc(21 * var(--u)), 12.5cqh);
+  font-weight: var(--weight-semibold);
+  font-variant-numeric: tabular-nums;
+}
+
+.art {
+  position: absolute;
+  top: 50%;
+  display: block;
+  transform: translateY(-50%);
+}

@@ -54,6 +54,9 @@
   --safe-bottom: env(safe-area-inset-bottom, 0px);
   --safe-left: env(safe-area-inset-left, 0px);
 
+  /* Tasarım birimi: referans görseller 390 px genişlikte ölçüldü. */
+  --u: calc(100vw / 390);
+
   /* Gerçek görünür yükseklik; platform/viewport.ts JS ile günceller. */
   --app-height: 100vh;
 }

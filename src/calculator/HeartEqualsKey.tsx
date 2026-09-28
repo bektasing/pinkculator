@@ -4,7 +4,7 @@ import { heartBurst } from '../effects/heartBurst';
 import { HEART_PATH } from '../effects/heartShape';
 import { prefersReducedMotion } from '../effects/reducedMotion';
 import { impactHeavy, impactLight, impactMedium } from '../platform/haptics';
-import { usePressSpring } from './usePressSpring';
+import { usePressSpring } from '../effects/usePressSpring';
 import styles from './HeartEqualsKey.module.css';
 
 /** Gizli menü için basılı tutma süresi */

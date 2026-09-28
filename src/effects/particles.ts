@@ -10,6 +10,8 @@ export const HEART_PALETTE = ['#f5cccb', '#f2b8ba', '#eba3a8', '#e4939a', '#d886
 
 export interface BurstConfig {
   count: [number, number];
+  /** Ana yön (radyan); varsayılan yukarı (−π/2) */
+  direction?: number;
   size: [number, number];
   /** Yukarı yönden (−π/2) sapma açısı; π = her yöne */
   spread: number;
@@ -63,6 +65,43 @@ export const BURSTS = {
     sway: [8, 18],
     spin: 3,
   },
+  /** Yeni rekor: ekranın üstünden yağan kalpler (tek tek, sürekli yayılır) */
+  rain: {
+    count: [1, 1],
+    direction: Math.PI / 2,
+    size: [14, 34],
+    spread: 0.35,
+    speed: [40, 140],
+    life: [2600, 3400],
+    gravity: 160,
+    drag: 0.9,
+    sway: [10, 24],
+    spin: 1.6,
+  },
+  /** Oyun içi küçük vuruş/birleşme patlaması */
+  pop: {
+    count: [3, 4],
+    size: [10, 20],
+    spread: 1.1,
+    speed: [90, 190],
+    life: [650, 850],
+    gravity: -40,
+    drag: 2,
+    sway: [4, 9],
+    spin: 2.4,
+  },
+  /** Halka şeklinde patlama (mükemmel yerleştirme vb.) */
+  ring: {
+    count: [12, 14],
+    size: [12, 22],
+    spread: Math.PI,
+    speed: [150, 240],
+    life: [700, 900],
+    gravity: -20,
+    drag: 2.6,
+    sway: [2, 5],
+    spin: 2,
+  },
 } satisfies Record<string, BurstConfig>;
 
 interface Particle {
@@ -96,6 +135,8 @@ const POP_IN_MS = 140;
 export class HeartParticles {
   private items: Particle[] = [];
   private pool: Particle[] = [];
+  /** Yeni parçacık eklenince çağrılır (boşta duran çizim döngüsünü uyandırmak için) */
+  onWake: (() => void) | null = null;
 
   get count(): number {
     return this.items.length;
@@ -109,7 +150,7 @@ export class HeartParticles {
 
     for (let i = 0; i < count; i++) {
       const p = this.pool.pop() ?? ({} as Particle);
-      const angle = -Math.PI / 2 + rand(-config.spread, config.spread);
+      const angle = (config.direction ?? -Math.PI / 2) + rand(-config.spread, config.spread);
       const speed = rand(config.speed[0], config.speed[1]) * motionScale;
       p.x = x;
       p.y = y;
@@ -128,6 +169,7 @@ export class HeartParticles {
       p.drag = config.drag;
       this.items.push(p);
     }
+    this.onWake?.();
   }
 
   /** dt saniye cinsinden. Canlı parçacık kaldıysa true döner. */

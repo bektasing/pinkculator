@@ -1,0 +1,117 @@
+.art {
+  display: block;
+  height: 100%;
+  width: auto;
+  overflow: visible;
+}
+
+/* Sürekli, hafif animasyonlar. Menü kapalıyken .paused ile durdurulur. */
+.bounceHeart {
+  animation: bounce 1.9s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+}
+
+.paddle {
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+  animation: paddle 1.9s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+}
+
+.lines {
+  animation: lines 1.9s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+}
+
+@keyframes bounce {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-7px);
+  }
+}
+
+@keyframes paddle {
+  0%,
+  8%,
+  100% {
+    transform: scaleY(0.94);
+  }
+  30%,
+  80% {
+    transform: scaleY(1);
+  }
+}
+
+@keyframes lines {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.55;
+  }
+}
+
+.goldHeart {
+  transform-box: fill-box;
+  transform-origin: 50% 55%;
+  animation: goldPulse 3.2s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+}
+
+.shimmer {
+  animation: shimmer 3.2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+@keyframes goldPulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+@keyframes shimmer {
+  0%,
+  35% {
+    transform: translateX(0);
+    opacity: 0;
+  }
+  40% {
+    opacity: 1;
+  }
+  70% {
+    transform: translateX(62px);
+    opacity: 1;
+  }
+  75%,
+  100% {
+    transform: translateX(62px);
+    opacity: 0;
+  }
+}
+
+.topHeart {
+  animation: sway 2.6s cubic-bezier(0.45, 0, 0.55, 1) infinite alternate;
+}
+
+@keyframes sway {
+  from {
+    transform: rotate(-6deg);
+  }
+  to {
+    transform: rotate(6deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bounceHeart,
+  .paddle,
+  .lines,
+  .goldHeart,
+  .shimmer,
+  .topHeart {
+    animation: none;
+  }
+}
