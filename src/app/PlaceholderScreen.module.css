@@ -1,0 +1,22 @@
+.root {
+  height: 100%;
+  background: var(--bg-menu);
+  padding: calc(var(--safe-top) + 16px) 16px var(--safe-bottom);
+}
+
+.back {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--card);
+  color: var(--ink);
+  font-size: 28px;
+  font-weight: var(--weight-extrabold);
+}
+
+.title {
+  margin: 24px 0 0;
+  text-align: center;
+  font-size: 44px;
+  font-weight: var(--weight-extrabold);
+}

@@ -1,0 +1,122 @@
+.key {
+  --edge: 7px;
+  --radius: calc(var(--kh) * 0.32);
+  position: relative;
+  width: 100%;
+  height: 100%;
+  touch-action: none;
+  cursor: default;
+}
+
+/* Renk setleri: yüz, üst parlak ton, alt ton, kalınlık kenarı, simge */
+.num {
+  --face: var(--key-num);
+  --top: var(--key-num-top);
+  --bottom: var(--key-num-bottom);
+  --edge-color: var(--key-num-edge);
+  --glyph: var(--ink);
+  --shade: rgba(188, 148, 124, 0.42);
+}
+
+.fn {
+  --face: var(--key-fn);
+  --top: var(--key-fn-top);
+  --bottom: #efbfbf;
+  --edge-color: var(--key-fn-edge);
+  --glyph: var(--ink);
+  --shade: rgba(200, 122, 128, 0.38);
+}
+
+.op {
+  --face: var(--key-op);
+  --top: var(--key-op-top);
+  --bottom: #bd6c75;
+  --edge-color: var(--key-op-edge);
+  --glyph: var(--on-op);
+  --shade: rgba(122, 48, 58, 0.36);
+}
+
+/* Alt kalınlık kenarı + altındaki yumuşak pembe hale (sabit, hareket etmez) */
+.base {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: var(--edge);
+  bottom: 0;
+  border-radius: var(--radius);
+  background-color: var(--edge-color);
+  background-image:
+    linear-gradient(90deg, rgba(255, 246, 243, 0.18), transparent 30%, transparent 70%, rgba(122, 63, 69, 0.08)),
+    linear-gradient(0deg, rgba(122, 63, 69, 0.12), transparent 6px);
+  box-shadow:
+    0 14px 20px -6px rgba(226, 146, 160, 0.8),
+    0 5px 8px -2px rgba(222, 146, 158, 0.45),
+    -8px 12px 18px -8px rgba(226, 146, 160, 0.7);
+}
+
+/* Basınca aşağı inen yüz: yastık gibi ortası açık, kenarlara doğru yuvarlanan hacim */
+.face {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: calc(100% - var(--edge));
+  border-radius: var(--radius);
+  overflow: hidden;
+  background:
+    radial-gradient(120% 85% at 42% 30%, var(--top) 0%, transparent 72%),
+    linear-gradient(180deg, var(--top) 0%, var(--face) 50%, var(--bottom) 100%);
+  box-shadow:
+    inset 0 3px 3px -1px rgba(255, 252, 248, 0.95),
+    inset 0 -12px 14px -7px var(--shade),
+    inset 0 -3px 3px -1px var(--shade),
+    inset 9px 0 11px -9px rgba(255, 252, 248, 0.75),
+    inset -10px 0 12px -9px var(--shade);
+  will-change: transform;
+}
+
+/* Sol üst parlama */
+.face::before {
+  content: '';
+  position: absolute;
+  left: 9%;
+  top: 7%;
+  width: 46%;
+  height: 34%;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(255, 253, 250, 0.7), rgba(255, 253, 250, 0));
+  pointer-events: none;
+}
+
+/* Aktif operatörde ters renk: krem yüz */
+.inverted {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(110% 80% at 38% 22%, var(--key-num-top) 0%, transparent 70%),
+    linear-gradient(180deg, var(--key-num-top) 0%, var(--key-num) 45%, var(--key-num-bottom) 100%);
+  box-shadow:
+    inset 0 3px 3px -1px rgba(255, 252, 248, 0.95),
+    inset 0 -12px 14px -7px rgba(188, 148, 124, 0.42),
+    inset 9px 0 11px -9px rgba(255, 252, 248, 0.75),
+    inset -10px 0 12px -9px rgba(188, 148, 124, 0.42);
+}
+
+.glyph {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  color: var(--glyph);
+  font-size: calc(var(--kw) * 0.61);
+  font-weight: var(--weight-extrabold);
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+.glyph svg {
+  width: calc(var(--kw) * 0.68);
+  height: calc(var(--kw) * 0.68);
+}

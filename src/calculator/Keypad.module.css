@@ -1,0 +1,26 @@
+.keypad {
+  display: grid;
+  grid-template-columns: repeat(4, var(--kw));
+  grid-auto-rows: var(--kh);
+  column-gap: var(--gap);
+  row-gap: var(--row-gap);
+  justify-content: space-between;
+}
+
+.zero {
+  grid-column: span 2;
+}
+
+.clearLabel {
+  font-size: calc(var(--kw) * 0.47);
+  letter-spacing: 0.01em;
+}
+
+.percent {
+  font-size: calc(var(--kw) * 0.46);
+}
+
+.comma {
+  font-size: calc(var(--kw) * 0.61);
+  transform: translateY(-0.12em);
+}

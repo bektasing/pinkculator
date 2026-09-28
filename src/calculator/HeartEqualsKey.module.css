@@ -1,0 +1,28 @@
+/* Kalp tuşu grid hücresine oturur ama görseldeki gibi hücreden biraz taşar. */
+.key {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  touch-action: none;
+  overflow: visible;
+}
+
+.heart {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: calc(var(--kw) * 1.36);
+  height: calc(var(--kw) * 1.36);
+  margin-left: calc(var(--kw) * -0.68);
+  margin-top: calc(var(--kw) * -0.62);
+  display: block;
+  will-change: transform;
+}
+
+.layer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}

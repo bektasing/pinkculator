@@ -1,0 +1,59 @@
+/*
+ * Pinkculator tasarım token'ları.
+ * Değerler design/calculator.png ve design/games-menu.png üzerinden ölçüldü
+ * (düz yüzeylerden medyan piksel). Görsel ile spec çelişirse görsel kazanır.
+ */
+:root {
+  /* — Zeminler — */
+  --bg-calc: #fbede4;
+  --display-bg: #fcf6ec;
+  --bg-menu: #edc5c6;
+  --card: #fef7ed;
+  --card-edge: #bfb0a1;
+
+  /* — Tuşlar: yüz rengi, üst parlak ton, alt kalınlık kenarı — */
+  --key-num: #f7f0e5;
+  --key-num-top: #faf3e8;
+  --key-num-bottom: #f2ebde;
+  --key-num-edge: #d6bdaf;
+
+  --key-fn: #f5cccb;
+  --key-fn-top: #fcd4d4;
+  --key-fn-edge: #d09f9c;
+
+  --key-op: #c9777f;
+  --key-op-top: #cf7e86;
+  --key-op-edge: #a25557;
+
+  /* Kalp = tuşu: üstten alta gradient + kalınlık + parlama */
+  --key-eq-top: #f29a9e;
+  --key-eq-mid: #dd858b;
+  --key-eq-bottom: #b46a6c;
+  --key-eq-edge: #a46264;
+  --key-eq-gloss: #fff6f3;
+  --key-eq: #c9777f;
+
+  /* Tuşların altındaki yumuşak pembe gölge */
+  --key-shadow: #d8969c;
+  --key-shadow-soft: #edd4d0;
+
+  /* — Yazı — */
+  --ink: #6d3e3f;
+  --ink-soft: #9e7672;
+  --on-op: #fceeea;
+
+  /* — Tipografi — */
+  --font-round: 'Nunito', 'Nunito Fallback', system-ui, sans-serif;
+  --weight-semibold: 600;
+  --weight-bold: 700;
+  --weight-extrabold: 800;
+
+  /* — Safe area — */
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-right: env(safe-area-inset-right, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-left: env(safe-area-inset-left, 0px);
+
+  /* Gerçek görünür yükseklik; platform/viewport.ts JS ile günceller. */
+  --app-height: 100vh;
+}

@@ -1,0 +1,27 @@
+/*
+ * Ölçüler design/calculator.png'den (390 px genişliğe ölçeklenmiş) alındı:
+ * yan boşluk 20, tuş 76, tuş arası 15, panel kenar boşluğu 14, panel–tuş arası ~40.
+ * Tüm ölçüler ekran genişliğinden türetilir; kısa ekranlarda tuş yüksekliği kısılır.
+ */
+.root {
+  --side: 5.1vw;
+  --gap: 3.9vw;
+  --row-gap: min(var(--gap), calc(var(--app-height) * 0.019));
+  --kw: calc((100vw - 2 * var(--side) - 3 * var(--gap)) / 4);
+  --kh: min(var(--kw), calc((var(--app-height) * 0.56 - 4 * var(--row-gap)) / 5));
+
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: var(--bg-calc);
+  padding:
+    calc(max(var(--safe-top), 30px) + 18px)
+    var(--side)
+    calc(max(var(--safe-bottom), 14px) + 22px);
+}
+
+.displayArea {
+  flex: 1;
+  min-height: 0;
+  margin: 0 calc(3.6vw - var(--side)) calc(var(--app-height) * 0.05);
+}
