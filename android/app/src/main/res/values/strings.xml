@@ -1,0 +1,6 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <!-- app_name ve title_activity_main, src/app/appInfo.ts'teki APP_NAME'den üretilir (app/build.gradle). -->
+    <string name="package_name">com.bektasing.pinkculator</string>
+    <string name="custom_url_scheme">com.bektasing.pinkculator</string>
+</resources>

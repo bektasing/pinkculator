@@ -1,7 +1,8 @@
 /* İçe gömük krem panel: zeminden açık, üst kenarda iç gölge, altta ışık */
 .panel {
-  --expression-size: min(calc(var(--kw) * 0.52), 15cqh);
-  --result-size: min(calc(var(--kw) * 1.17), 40cqh);
+  /* design/calculator.png'den ölçüldü: tuş genişliğine oranla */
+  --expression-size: min(calc(var(--kw) * 0.44), 13cqh);
+  --result-size: min(calc(var(--kw) * 1.04), 36cqh);
   position: relative;
   container-type: size;
   height: 100%;

@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 108 108" width="1024" height="1024">
+  <!--
+    Pinkculator uygulama ikonu (kaynak). Hesap makinesinin kalp = tuşuyla aynı çizim.
+    108 × 108 birim = Android adaptive icon ızgarası; kalp ortadaki 66 birimlik güvenli
+    dairenin içinde kalır. id="bg" katmanı ikonun krem zeminidir (adaptive icon'da
+    background katmanı olarak ayrı verilir).
+  -->
+  <defs>
+    <radialGradient id="bgGrad" cx="0.5" cy="0.42" r="0.7">
+      <stop offset="0" stop-color="#fff7f1" />
+      <stop offset="1" stop-color="#fbede4" />
+    </radialGradient>
+    <filter id="blur" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="4.5" />
+    </filter>
+    <filter id="soft" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="1.6" />
+    </filter>
+    <linearGradient id="edge" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#bd7277" />
+      <stop offset="1" stop-color="#a46264" />
+    </linearGradient>
+    <linearGradient id="body" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f29a9e" />
+      <stop offset="0.38" stop-color="#dd858b" />
+      <stop offset="1" stop-color="#b46a6c" />
+    </linearGradient>
+    <radialGradient id="rim" cx="0.46" cy="0.36" r="0.64">
+      <stop offset="0.55" stop-color="#fff6f3" stop-opacity="0" />
+      <stop offset="1" stop-color="#7a3f45" stop-opacity="0.28" />
+    </radialGradient>
+    <radialGradient id="gloss" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#fff6f3" stop-opacity="0.95" />
+      <stop offset="0.5" stop-color="#fff6f3" stop-opacity="0.5" />
+      <stop offset="1" stop-color="#fff6f3" stop-opacity="0" />
+    </radialGradient>
+    <path id="heart" d="M50 17 C54.5 8.5 62 3 71.5 3 C87 3 98 15.5 98 32 C98 55 69 74 56 82.5 C52.5 84.8 47.5 84.8 44 82.5 C31 74 2 55 2 32 C2 15.5 13 3 28.5 3 C38 3 45.5 8.5 50 17 Z" />
+    <clipPath id="clip">
+      <use href="#heart" />
+    </clipPath>
+  </defs>
+
+  <rect id="bg" width="108" height="108" fill="url(#bgGrad)" />
+
+  <!-- Kalp: 100 × 90'lık şekil 0,62 ölçekle ortalanır -->
+  <g transform="translate(23 25.5) scale(0.62)">
+    <use href="#heart" transform="translate(-1 11)" fill="#d8969c" opacity="0.7" filter="url(#blur)" />
+    <use href="#heart" transform="translate(0 6)" fill="url(#edge)" />
+    <use href="#heart" fill="url(#body)" />
+    <g clip-path="url(#clip)">
+      <rect width="100" height="90" fill="url(#rim)" />
+      <ellipse cx="56" cy="70" rx="24" ry="9" fill="#ffc9c8" opacity="0.32" filter="url(#soft)" />
+      <ellipse cx="28" cy="22" rx="19" ry="11.5" transform="rotate(-30 28 22)" fill="url(#gloss)" />
+      <ellipse cx="24" cy="19" rx="6.5" ry="3.8" transform="rotate(-30 24 19)" fill="#fff6f3" opacity="0.85" filter="url(#soft)" />
+      <ellipse cx="74" cy="15" rx="9" ry="4.6" transform="rotate(22 74 15)" fill="url(#gloss)" opacity="0.75" />
+    </g>
+    <!-- "=" işareti -->
+    <rect x="33.5" y="37.4" width="33" height="7.6" rx="3.8" fill="#8f4c55" opacity="0.3" />
+    <rect x="33.5" y="50.4" width="33" height="7.6" rx="3.8" fill="#8f4c55" opacity="0.3" />
+    <rect x="33.5" y="35.8" width="33" height="7.6" rx="3.8" fill="#fceeea" />
+    <rect x="33.5" y="48.8" width="33" height="7.6" rx="3.8" fill="#fceeea" />
+  </g>
+</svg>

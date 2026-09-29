@@ -6,6 +6,7 @@ import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { App } from './app/App';
 import { installBackButton } from './platform/backButton';
+import { hideSplashWhenReady } from './platform/splash';
 import { installViewportGuards } from './platform/viewport';
 
 installViewportGuards();
@@ -19,3 +20,4 @@ createRoot(root).render(
     <App />
   </StrictMode>,
 );
+hideSplashWhenReady();

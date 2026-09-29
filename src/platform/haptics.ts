@@ -7,6 +7,8 @@ import { isNative } from './native';
 
 function webVibrate(pattern: number | number[]): void {
   try {
+    // Kullanıcı sayfaya hiç dokunmadıysa tarayıcı titreşimi engeller ve konsola uyarı yazar.
+    if (navigator.userActivation && !navigator.userActivation.hasBeenActive) return;
     navigator.vibrate?.(pattern);
   } catch {
     // yok say
