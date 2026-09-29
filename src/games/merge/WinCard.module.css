@@ -1,0 +1,17 @@
+.title {
+  font-size: 76px;
+  line-height: 1.05;
+  font-weight: var(--weight-extrabold);
+  background: linear-gradient(180deg, #f7d466 0%, #d49620 60%, #9a6512 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  filter: drop-shadow(0 3px 0 rgba(143, 93, 14, 0.25));
+}
+
+.subtitle {
+  margin-top: 4px;
+  color: var(--ink-soft);
+  font-size: 18px;
+  font-weight: var(--weight-bold);
+}

@@ -1,4 +1,6 @@
 import { useMemo } from 'react';
+import { createBounceScene } from './bounce/bounceScene';
+import { MergeGame } from './merge/MergeGame';
 import { GameShell } from './shared/GameShell';
 import type { GameId, SceneFactory } from './shared/types';
 import { createTestScene } from './testScene';
@@ -15,7 +17,11 @@ interface GameScreenProps {
 }
 
 export function GameScreen({ id, onExit }: GameScreenProps) {
-  // Aşama 4–6'da her oyun kendi sahnesiyle değiştirilecek.
-  const createScene = useMemo<SceneFactory>(() => createTestScene(GAME_NAMES[id]), [id]);
+  // Henüz yazılmamış oyun (Kalp Kulesi) test sahnesini açar; Aşama 6'da değişecek.
+  const createScene = useMemo<SceneFactory>(
+    () => (id === 'bounce' ? createBounceScene : createTestScene(GAME_NAMES[id])),
+    [id],
+  );
+  if (id === 'merge') return <MergeGame onExit={onExit} />;
   return <GameShell gameId={id} createScene={createScene} onExit={onExit} />;
 }

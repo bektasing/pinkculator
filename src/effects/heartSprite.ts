@@ -14,18 +14,36 @@ function dpr(): number {
   return Math.min(window.devicePixelRatio || 1, 3);
 }
 
-/** Kalbi 0,0 noktasından başlayarak `width` genişliğinde doğrudan çizer. */
-export function paintHeart(ctx: CanvasRenderingContext2D, width: number, color: string): void {
+/** Altın kalp için özel renk anahtarı (2048 taşı) */
+export const GOLD = 'gold';
+
+const GOLD_STOPS: [number, string][] = [
+  [0, '#fff4bd'],
+  [0.3, '#f5cf52'],
+  [0.66, '#d49620'],
+  [1, '#8f5d0e'],
+];
+
+/**
+ * Kalbi 0,0 noktasından başlayarak `width` genişliğinde doğrudan çizer.
+ * `shine` (0–1): parlamanın gücü; değer büyüdükçe kalp daha "gösterişli" olur.
+ */
+export function paintHeart(ctx: CanvasRenderingContext2D, width: number, color: string, shine = 0): void {
   const s = width / HEART_VIEWBOX.width;
   const path = heartPath2D();
+  const gold = color === GOLD;
   ctx.save();
   ctx.scale(s, s);
 
   // Gövde: üstte açık, altta koyu; hacim hissi.
   const body = ctx.createLinearGradient(0, 4, 0, 88);
-  body.addColorStop(0, lighten(color, 0.38));
-  body.addColorStop(0.42, color);
-  body.addColorStop(1, darken(color, 0.3));
+  if (gold) {
+    for (const [offset, stop] of GOLD_STOPS) body.addColorStop(offset, stop);
+  } else {
+    body.addColorStop(0, lighten(color, 0.38 + shine * 0.08));
+    body.addColorStop(0.42, color);
+    body.addColorStop(1, darken(color, 0.3));
+  }
   ctx.fillStyle = body;
   ctx.fill(path);
 
@@ -42,15 +60,32 @@ export function paintHeart(ctx: CanvasRenderingContext2D, width: number, color: 
   ctx.translate(30, 23);
   ctx.rotate(-0.55);
   ctx.scale(1, 0.58);
-  const gloss = ctx.createRadialGradient(0, 0, 0, 0, 0, 17);
+  const glossR = 17 * (1 + shine * 0.18);
+  const gloss = ctx.createRadialGradient(0, 0, 0, 0, 0, glossR);
   gloss.addColorStop(0, 'rgba(255, 250, 247, 0.95)');
-  gloss.addColorStop(0.45, 'rgba(255, 250, 247, 0.55)');
+  gloss.addColorStop(0.45, `rgba(255, 250, 247, ${0.55 + shine * 0.25})`);
   gloss.addColorStop(1, 'rgba(255, 250, 247, 0)');
   ctx.fillStyle = gloss;
   ctx.beginPath();
-  ctx.arc(0, 0, 17, 0, Math.PI * 2);
+  ctx.arc(0, 0, glossR, 0, Math.PI * 2);
   ctx.fill();
   ctx.restore();
+
+  // Sağ lob üstünde ikinci, küçük parlama (değer büyüdükçe belirginleşir)
+  if (shine > 0 || gold) {
+    ctx.save();
+    ctx.translate(73, 16);
+    ctx.rotate(0.4);
+    ctx.scale(1, 0.5);
+    const spec = ctx.createRadialGradient(0, 0, 0, 0, 0, 8);
+    spec.addColorStop(0, `rgba(255, 250, 247, ${gold ? 0.9 : 0.35 + shine * 0.5})`);
+    spec.addColorStop(1, 'rgba(255, 250, 247, 0)');
+    ctx.fillStyle = spec;
+    ctx.beginPath();
+    ctx.arc(0, 0, 8, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+  }
 
   ctx.restore();
 }
@@ -94,21 +129,38 @@ export function drawHeart(
   rotation = 0,
   alpha = 1,
 ): void {
+  drawHeartScaled(ctx, x, y, size, color, rotation, 1, 1, alpha);
+}
+
+/**
+ * Squash & stretch için: önce dünya eksenlerinde (sx, sy) ölçekler, sonra kalbi
+ * kendi dönüşüyle çizer. Böylece çarpma yönünde yassılma, dönüşten bağımsız kalır.
+ */
+export function drawHeartScaled(
+  ctx: CanvasRenderingContext2D,
+  x: number,
+  y: number,
+  size: number,
+  color: string,
+  rotation: number,
+  sx: number,
+  sy: number,
+  alpha = 1,
+): void {
   if (alpha <= 0 || size <= 0) return;
   const sprite = getHeartSprite(color, size);
-  const ratio = dpr();
-  const bucket = bucketFor(size);
-  const scale = size / bucket / ratio;
+  const scale = size / bucketFor(size) / dpr();
   const w = sprite.width * scale;
   const h = sprite.height * scale;
 
   ctx.globalAlpha = alpha;
-  if (rotation === 0) {
+  if (rotation === 0 && sx === 1 && sy === 1) {
     ctx.drawImage(sprite, x - w / 2, y - h / 2, w, h);
   } else {
     ctx.save();
     ctx.translate(x, y);
-    ctx.rotate(rotation);
+    if (sx !== 1 || sy !== 1) ctx.scale(sx, sy);
+    if (rotation !== 0) ctx.rotate(rotation);
     ctx.drawImage(sprite, -w / 2, -h / 2, w, h);
     ctx.restore();
   }
