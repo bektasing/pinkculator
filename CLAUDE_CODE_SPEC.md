@@ -345,7 +345,7 @@ Referans: Instagram mesajlarındaki gizli emoji sektirme oyunu. Aynı his, bizim
    - Oyun içinde → oyunu duraklatır/kapatır, menüye döner
    - Menüde → hesap makinesine döner
    - Hesap makinesinde → uygulamayı arka plana alır
-5. **Uygulama ikonu:** Krem zemin üzerinde gül kurusu, hacimli kalp; içinde krem "=" işareti (hesap makinesinin kalp tuşuyla aynı). Adaptive icon (foreground + background katmanları) olarak hazırla. SVG kaynağını da `design/icon.svg` olarak kaydet.
+5. **Uygulama ikonu:** Krem zemin üzerinde gül kurusu, hacimli kalp; içinde krem "=" işareti (hesap makinesinin kalp tuşuyla aynı). Adaptive icon (foreground + background katmanları) olarak hazırla. *(Güncelleme: ikonun kaynağı artık `design/icon-source.jpg`; katmanlar, Android 13+ tek renkli ikon ve eski cihaz PNG'leri `scripts/generate-icons.py` ile bu görselden üretilir. Eski `design/icon.svg` kaldırıldı.)*
 6. **Açılış ekranı (splash):** Krem arka plan, ortada aynı kalp. Kısa sürsün, uygulamaya yumuşak geçiş.
 7. **Uygulama adı:** "Pinkculator" (tek bir sabit olarak tut).
 8. WebView'de metin ölçeklendirmesini (sistem yazı boyutu) devre dışı bırak ki tasarım bozulmasın.
@@ -398,7 +398,7 @@ Zevkli ama abartısız, "arka planda kalan" sesler. Uygulama içinde ses ayarı 
 - Tarayıcının "kullanıcı etkileşimi olmadan ses yok" kısıtlaması: ses altyapısı ilk dokunuşta güvenle başlar, konsola hata düşmez.
 - Sesler mevcut titreşim/parçacık tetikleyicilerine eklenir, onların yerine geçmez; testler bozulmaz.
 - Rapor: seslerin kaynağı (sentez mi, hangi kaynak), dosya boyutları, toplam eklenen boyut.
-- **Ses karakteri (revizyon):** İlk sürüm tiz ve "ucuz" bulundu. Hedef: yumuşak, sıcak, "pahalı uygulama" hissi (iOS sistem sesleri, Monument Valley / Alto's Odyssey tarzı). Yumuşak atak ve sönüş (ani başlangıç/kesilme yok); tonlar ~1 oktav pes ama telefon hoparlörünün duyurabildiği bantta; tek sinüs yerine katmanlı tını (harmonikler, çanlarda kısa FM sentez, tahta seslerde marimba partiyelleri); uzun seslerde 10–30 ms'lik kısa oda yankısı. Tap sesi en çok cilalanan: sert tık yerine parmak ucuyla yumuşak yüzeye dokunma hissi veren "pop". Birkaç varyasyon `design/sound-preview/` altında dinlenebilir; biri seçilip uygulamaya yazılır, VOLUMES yeni tınılara göre dengelenir. Format (gömülü ADPCM), olay→ses eşlemesi ve polifoni yönetimi aynı kalır.
+- **Ses karakteri (revizyon):** İlk sürüm tiz ve "ucuz" bulundu. Hedef: yumuşak, sıcak, "pahalı uygulama" hissi (iOS sistem sesleri, Monument Valley / Alto's Odyssey tarzı). Yumuşak atak ve sönüş (ani başlangıç/kesilme yok); tonlar ~1 oktav pes ama telefon hoparlörünün duyurabildiği bantta; tek sinüs yerine katmanlı tını (harmonikler, çanlarda kısa FM sentez, tahta seslerde marimba partiyelleri); uzun seslerde 10–30 ms'lik kısa oda yankısı. Tap sesi en çok cilalanan: sert tık yerine parmak ucuyla yumuşak yüzeye dokunma hissi veren "pop". Birkaç varyasyon üretilip dinlendi (`sicak` seçildi, önizleme klasörü sonra silindi); seçilen uygulamaya yazılır, VOLUMES yeni tınılara göre dengelenir. Format (gömülü ADPCM), olay→ses eşlemesi ve polifoni yönetimi aynı kalır.
 
 ### 8B — Gizli tarih ekranları
 
