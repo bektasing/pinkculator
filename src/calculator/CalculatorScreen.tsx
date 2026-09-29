@@ -1,6 +1,7 @@
 import { useCallback, useRef, useState } from 'react';
+import { playSound } from '../audio/sounds';
 import { heartBurst } from '../effects/heartBurst';
-import { impactLight, notifyError } from '../platform/haptics';
+import { impactHeavy, impactLight, notifyError } from '../platform/haptics';
 import { Display } from './Display';
 import {
   activeOperator,
@@ -12,13 +13,19 @@ import {
   type CalculatorAction,
 } from './engine';
 import { Keypad } from './Keypad';
+import { isSecretEntry } from './secretCode';
 import styles from './CalculatorScreen.module.css';
 
 interface CalculatorScreenProps {
   onOpenMenu: (origin: { x: number; y: number }) => void;
+  /** Gizli kod yazılıp = kısa basıldığında (bkz. secretCode.ts) */
+  onOpenSecret: (origin: { x: number; y: number }) => void;
 }
 
-export function CalculatorScreen({ onOpenMenu }: CalculatorScreenProps) {
+/** Patlamadan sonra gizli ekrana geçişe kadar kısa bekleme (menü açılışıyla aynı) */
+const SECRET_DELAY_MS = 160;
+
+export function CalculatorScreen({ onOpenMenu, onOpenSecret }: CalculatorScreenProps) {
   const [state, setState] = useState(initialState);
   // Durum ref'te de tutulur: çok hızlı art arda basışlarda her tuş en güncel duruma uygulanır.
   const stateRef = useRef(state);
@@ -34,6 +41,8 @@ export function CalculatorScreen({ onOpenMenu }: CalculatorScreenProps) {
   const handleKey = useCallback(
     (action: CalculatorAction, x: number, y: number) => {
       heartBurst(x, y, 'tap');
+      // Rakamlar biraz daha parlak, fonksiyon/operatör tuşları biraz daha tok.
+      playSound('tap', { rate: action.type === 'digit' || action.type === 'decimal' ? 1 : 0.86, jitter: 0.03 });
       const becameError = dispatch(action);
       if (becameError) notifyError();
       else impactLight();
@@ -41,9 +50,24 @@ export function CalculatorScreen({ onOpenMenu }: CalculatorScreenProps) {
     [dispatch],
   );
 
-  const handleEquals = useCallback(() => {
-    if (dispatch({ type: 'equals' })) notifyError();
-  }, [dispatch]);
+  const secretOpening = useRef(false);
+  const handleEquals = useCallback(
+    (origin: { x: number; y: number }) => {
+      if (secretOpening.current) return;
+      if (isSecretEntry(stateRef.current)) {
+        // Normal hesaplama yapılmaz: güçlü titreşim, büyük kalp patlaması, sonra gizli ekran.
+        secretOpening.current = true;
+        impactHeavy();
+        playSound('unlock');
+        heartBurst(origin.x, origin.y, 'grand');
+        window.setTimeout(() => onOpenSecret(origin), SECRET_DELAY_MS);
+        return;
+      }
+      playSound('ding');
+      if (dispatch({ type: 'equals' })) notifyError();
+    },
+    [dispatch, onOpenSecret],
+  );
 
   const handleSwipe = useCallback(() => {
     const before = stateRef.current;

@@ -8,7 +8,7 @@ Kalite çıtası: Bu bir hediye ve görsel kalite her şeyden önemli. "Çalış
 
 ## 0. Çalışma şekli (önemli)
 
-- Proje aşağıdaki **7 aşamaya** bölündü. Aşamaları sırayla yap. Bazı aşamalar A/B alt bölümlerinden oluşuyor; alt bölümlerin arasında durma, aşamanın tamamını bitirince dur.
+- Proje aşağıdaki **7 aşamaya** bölündü (sonradan eklenen özellikler Aşama 8 ve sonrası olarak en sona yazılır). Aşamaları sırayla yap. Bazı aşamalar A/B alt bölümlerinden oluşuyor; alt bölümlerin arasında durma, aşamanın tamamını bitirince dur.
 - Her aşamanın sonunda: kodu çalıştır, gerekiyorsa testleri koş, ne yaptığını ve nasıl test edeceğimi kısaca özetle, sonra **benim onayımı bekle**. Onay vermeden bir sonraki aşamaya geçme.
 - Görsel referanslar `design/` klasöründe:
   - `design/calculator.png` → hesap makinesi ana ekranı
@@ -370,3 +370,45 @@ Aşağıdaki listeyi tek tek kontrol et ve sonuçları raporla:
 - [ ] Konsolda hata veya uyarı yok.
 
 Son olarak: projeyi kısa bir mimari özetle, bilinen sınırlamalarla ve "sonraki adım" önerileriyle birlikte bana raporla.
+
+---
+
+## AŞAMA 8 — Ses efektleri ve gizli tarih ekranı
+
+İki parça; aralarında durma, ikisi bitince dur. Git kuralları aynen geçerli.
+
+### 8A — Ses efektleri
+
+Zevkli ama abartısız, "arka planda kalan" sesler. Uygulama içinde ses ayarı veya kapatma tuşu yok; seviye telefonun medya sesiyle ayarlanır, sessiz mod / rahatsız etmeyin davranışı Android'e bırakılır.
+
+| Nerede | Ses |
+|---|---|
+| Rakam ve fonksiyon tuşları (AC, ±, %, operatörler) | Yumuşak, kısa "tık/pop"; görsel basışla (pointerdown) senkron |
+| `=` kalp tuşu, kısa basış | Biraz daha belirgin, tatlı "ding" |
+| 3 sn basılı tutma | Dolum ilerledikçe artan hafif nabız sesi; dolunca ayrı, belirgin "açılış" sesi |
+| Menü kartı seçimi | Hafif tık |
+| Kalp Sektirme vuruşu | Kısa "boing" |
+| Kalp Birleştir | Birleşmede kısa ses; 2048'de ayrı kutlama sesi |
+| Kalp Kulesi | Blok oturunca ses; "Mükemmel"de ayrı, daha parlak ses |
+| Yeni rekor (her oyun) | Oyun sonu kartıyla birlikte kısa kutlama sesi |
+
+- Sesler küçük, gömülü dosyalar (WAV/OGG, birkaç KB hedef); hiçbir harici URL yok, internetsiz çalışır.
+- Seviyeler birbirine göre dengeli; hiçbiri rahatsız edici yüksek değil.
+- Üst üste tetiklenen sesler bozulmamalı (aynı sesin eski kopyaları kısaca susturulur / karıştırılır).
+- Tarayıcının "kullanıcı etkileşimi olmadan ses yok" kısıtlaması: ses altyapısı ilk dokunuşta güvenle başlar, konsola hata düşmez.
+- Sesler mevcut titreşim/parçacık tetikleyicilerine eklenir, onların yerine geçmez; testler bozulmaz.
+- Rapor: seslerin kaynağı (sentez mi, hangi kaynak), dosya boyutları, toplam eklenen boyut.
+
+### 8B — Gizli tarih ekranı
+
+3 saniyelik menü mekanizmasından tamamen bağımsız ikinci gizli özellik.
+
+- **Tetikleme:** Ekrana gizli kod (`29062023`) yazılıp `=` **kısa** basılırsa ve bekleyen bir işlem yoksa (`+ − × ÷` zincirine girilmemişse) normal hesaplama yapılmaz, "Seni seviyorum" ekranı açılır.
+- **Görünüm:** Tam ekran, toz pembe / gül kurusu / krem temasıyla uyumlu. Ortada büyük, sıcak "Seni seviyorum" (Nunito, kalın). Mesajın üstünde, krem puffy çerçevede ikimizin fotoğrafı (`src/assets/photos/us.jpg`, 3:4 dikey). Etrafta farklı boyut ve tonlarda kalpler: bazıları yavaşça yukarı süzülür, bazıları sabit durur ve fotoğraf/yazının üstüne binmez (mevcut kalp çizimi ve parçacık sistemi kullanılır).
+- **Açılış:** Güçlü titreşim + geniş kalp patlaması (= tuşu patlamasıyla tutarlı), ardından yumuşak geçiş.
+- **Kapatma:** Diğer overlay'lerle tutarlı küçük bir "Kapat" butonu ve Android geri tuşu hesap makinesine döndürür; dönünce hesap makinesi sıfırlanır.
+- Menüyle çakışmaz: bu ekran açıkken `=`'e uzun basılması hiçbir şey yapmaz.
+- Uygulamada bu özelliğe dair hiçbir ipucu yok.
+- **Kod organizasyonu:** Gizli kod ve mesaj tek dosyada, ayrı sabitler (`src/calculator/secretCode.ts`); tek satır değiştirerek güncellenebilir.
+- Rapor: görsel farklar (varsa) ve dokunarak adım adım test.
+

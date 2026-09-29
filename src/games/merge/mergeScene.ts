@@ -2,6 +2,7 @@ import { BURSTS } from '../../effects/particles';
 import { GOLD, paintHeart } from '../../effects/heartSprite';
 import { HEART_VIEWBOX } from '../../effects/heartShape';
 import { prefersReducedMotion } from '../../effects/reducedMotion';
+import { playSound } from '../../audio/sounds';
 import { impactHeavy, impactLight, notifySuccess } from '../../platform/haptics';
 import type { GamePointer, SceneFactory } from '../shared/types';
 import { applyMove, newGame, SIZE, type Direction, type MergeState, type MoveOutcome } from './logic';
@@ -323,6 +324,7 @@ export function createMergeScene(bridge: MergeBridge, initial: MergeState | null
       }
       pendingBursts = [];
       impactLight();
+      playSound('merge', { jitter: 0.03 });
     };
 
     const publish = (gained: number) => {
@@ -471,6 +473,7 @@ export function createMergeScene(bridge: MergeBridge, initial: MergeState | null
           }
           impactHeavy();
           notifySuccess();
+          playSound('win');
           bridge.onWin();
         }
         if (gameOverAt >= 0 && time >= gameOverAt) {

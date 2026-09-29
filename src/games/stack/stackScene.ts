@@ -2,6 +2,7 @@ import { darken, hexToRgb, lighten, rgbToCss, type RGB } from '../../effects/col
 import { drawHeartScaled } from '../../effects/heartSprite';
 import { BURSTS } from '../../effects/particles';
 import { prefersReducedMotion } from '../../effects/reducedMotion';
+import { playSound } from '../../audio/sounds';
 import { impactLight, impactMedium } from '../../platform/haptics';
 import { FIXED_STEP } from '../shared/loop';
 import type { SceneFactory } from '../shared/types';
@@ -279,8 +280,11 @@ export const createStackScene: SceneFactory = ({ particles, gameOver, insets }) 
       comboPop.velocity = 0;
       if (result.combo >= 3) impactMedium();
       else impactLight();
+      // Kombo arttıkça çınlama bir tık yükselir.
+      playSound('perfect', { rate: 1 + Math.min(result.combo - 1, 6) * 0.045 });
     } else {
       impactLight();
+      playSound('place', { jitter: 0.04 });
     }
   };
 

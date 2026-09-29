@@ -3,6 +3,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { CalculatorScreen } from '../calculator/CalculatorScreen';
 import { HeartBurstLayer } from '../effects/HeartBurstLayer';
 import { GameScreen } from '../games/GameScreen';
+import { LoveScreen } from '../love/LoveScreen';
 import { GamesMenu } from '../menu/GamesMenu';
 import { registerBackHandler } from '../platform/backButton';
 import type { GameId, Point, Screen } from './screens';
@@ -38,6 +39,8 @@ export function App() {
   const [screen, setScreen] = useState<Screen>({ name: 'calculator' });
   // Oyun ekranı tamamen açılınca alttaki menü çizilmez (animasyonları da durur).
   const [gameCoversMenu, setGameCoversMenu] = useState(false);
+  // Gizli ekrandan dönünce hesap makinesi sıfırdan başlar (yeni bileşen = yeni durum).
+  const [calculatorKey, setCalculatorKey] = useState(0);
 
   const openMenu = useCallback((origin: Point) => setScreen({ name: 'menu', origin }), []);
   const closeMenu = useCallback(() => setScreen({ name: 'calculator' }), []);
@@ -46,15 +49,25 @@ export function App() {
       setScreen((current) => (current.name === 'menu' ? { name: 'game', id, origin: current.origin, gameOrigin } : current)),
     [],
   );
+  const openSecret = useCallback((origin: Point) => setScreen({ name: 'love', origin }), []);
+  const closeSecret = useCallback(() => {
+    setCalculatorKey((key) => key + 1);
+    setScreen({ name: 'calculator' });
+  }, []);
   const closeGame = useCallback(() => {
     setGameCoversMenu(false);
     setScreen((current) => (current.name === 'game' ? { name: 'menu', origin: current.origin } : current));
   }, []);
 
-  // Android geri tuşu: oyun → menü → hesap makinesi → (işlenmez, uygulama arka plana gider)
+  // Android geri tuşu: oyun → menü → hesap makinesi → (işlenmez, uygulama arka plana gider);
+  // gizli ekran → hesap makinesi
   useEffect(
     () =>
       registerBackHandler(() => {
+        if (screen.name === 'love') {
+          closeSecret();
+          return true;
+        }
         if (screen.name === 'game') {
           closeGame();
           return true;
@@ -65,16 +78,17 @@ export function App() {
         }
         return false;
       }),
-    [screen, closeGame, closeMenu],
+    [screen, closeGame, closeMenu, closeSecret],
   );
 
-  const menuOrigin = screen.name === 'calculator' ? null : screen.origin;
+  const menuOrigin = screen.name === 'menu' || screen.name === 'game' ? screen.origin : null;
+  const loveOrigin = screen.name === 'love' ? screen.origin : null;
   const game = screen.name === 'game' ? screen : null;
 
   return (
     <div className={styles.app}>
       <div className={styles.screen} aria-hidden={screen.name !== 'calculator'}>
-        <CalculatorScreen onOpenMenu={openMenu} />
+        <CalculatorScreen key={calculatorKey} onOpenMenu={openMenu} onOpenSecret={openSecret} />
       </div>
 
       <AnimatePresence>
@@ -97,6 +111,14 @@ export function App() {
             }}
           >
             <GameScreen id={game.id} onExit={closeGame} />
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {loveOrigin && (
+          <motion.div key="love" className={styles.screen} style={{ zIndex: 4 }} {...revealProps(loveOrigin)}>
+            <LoveScreen onClose={closeSecret} />
           </motion.div>
         )}
       </AnimatePresence>

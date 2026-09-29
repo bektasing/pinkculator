@@ -8,7 +8,7 @@ interface KeypadProps {
   clearLabel: 'AC' | 'C';
   activeOperator: Operator | null;
   onKey: (action: CalculatorAction, x: number, y: number) => void;
-  onEquals: () => void;
+  onEquals: (origin: { x: number; y: number }) => void;
   onOpenMenu: (origin: { x: number; y: number }) => void;
 }
 

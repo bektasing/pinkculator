@@ -1,3 +1,4 @@
+import { playSound } from '../audio/sounds';
 import { motion } from 'motion/react';
 import { formatRecordLabel } from '../games/shared/records';
 import type { GameId } from '../games/shared/types';
@@ -57,7 +58,10 @@ export function GamesMenu({ onBack, onOpenGame, covered = false }: GamesMenuProp
             record={formatRecordLabel(best[game.id])}
             art={game.art}
             artClassName={game.artClass}
-            onOpen={(point) => onOpenGame(game.id, point)}
+            onOpen={(point) => {
+              playSound('tap', { rate: 0.78, volume: 0.9 });
+              onOpenGame(game.id, point);
+            }}
           />
         ))}
       </div>

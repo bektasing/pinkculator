@@ -102,6 +102,18 @@ export const BURSTS = {
     sway: [2, 5],
     spin: 2,
   },
+  /** Gizli ekran: aşağıdan yavaşça süzülen tek kalp */
+  float: {
+    count: [1, 1],
+    size: [14, 34],
+    spread: 0.12,
+    speed: [70, 130],
+    life: [5200, 7400],
+    gravity: -6,
+    drag: 0.05,
+    sway: [10, 22],
+    spin: 0.5,
+  },
 } satisfies Record<string, BurstConfig>;
 
 interface Particle {

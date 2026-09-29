@@ -1,5 +1,6 @@
 import { animate, motion, useMotionValue, useTransform } from 'motion/react';
 import { useEffect, useId, useRef, type PointerEvent } from 'react';
+import { playSound } from '../audio/sounds';
 import { heartBurst } from '../effects/heartBurst';
 import { HEART_PATH } from '../effects/heartShape';
 import { prefersReducedMotion } from '../effects/reducedMotion';
@@ -20,8 +21,8 @@ const BEAT_FAST_MS = 170;
 const MENU_DELAY_MS = 160;
 
 interface HeartEqualsKeyProps {
-  /** Kısa basış (veya tamamlanmamış dolum) bırakıldığında */
-  onEquals: () => void;
+  /** Kısa basış (veya tamamlanmamış dolum) bırakıldığında; kalbin ekrandaki merkezi ile */
+  onEquals: (origin: { x: number; y: number }) => void;
   /** 3 saniye dolunca; kalbin ekrandaki merkezi ile */
   onOpenMenu: (origin: { x: number; y: number }) => void;
 }
@@ -80,6 +81,8 @@ export function HeartEqualsKey({ onEquals, onOpenMenu }: HeartEqualsKeyProps) {
     const peak = prefersReducedMotion() ? 1.02 : 1.06 + progress * 0.05;
     animate(pulse, [pulse.get(), peak, 1], { duration: 0.24, ease: [0.2, 0.7, 0.3, 1] });
     impactLight();
+    // Dolum ilerledikçe nabız sesi hem yükselir hem incelir.
+    playSound('pulse', { volume: 0.45 + progress * 0.55, rate: 1 + progress * 0.3 });
   };
 
   const stopHoldLoop = () => {
@@ -118,6 +121,7 @@ export function HeartEqualsKey({ onEquals, onOpenMenu }: HeartEqualsKeyProps) {
     h.phase = 'opened';
     stopHoldLoop();
     impactHeavy();
+    playSound('unlock');
     const origin = heartCenter();
     heartBurst(origin.x, origin.y, 'grand');
     animate(pulse, [1.18, 1], { type: 'spring', stiffness: 300, damping: 14 });
@@ -174,7 +178,7 @@ export function HeartEqualsKey({ onEquals, onOpenMenu }: HeartEqualsKeyProps) {
       stopHoldLoop();
       release();
       drainFill();
-      callbacks.current.onEquals();
+      callbacks.current.onEquals(heartCenter());
     }
     h.phase = 'idle';
   };

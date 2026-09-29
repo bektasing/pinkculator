@@ -120,3 +120,9 @@ Bu dosya telefona yüklenemez.
   *res → New → Image Asset* kullanılabilir.
 - **Açılış ekranı:** Android 12+ SplashScreen API'si kullanılır: krem zemin, ortada aynı kalp
   (`values/styles.xml`). Fontlar yüklenip ilk kare çizilince JS kapatır (`src/platform/splash.ts`).
+- **Sesler:** `src/assets/sounds/*.wav` dosyaları `scripts/generate-sounds.mjs` ile sentezlenir
+  (dış kaynak veya örnek kullanılmaz). Sesi değiştirmek için betikteki ilgili fonksiyonu düzenleyip
+  `node scripts/generate-sounds.mjs` çalıştır. Dosyalar 4 bit IMA ADPCM WAV'dır; uygulama
+  bunları kendi çözer (`src/audio/wav.ts`). Seslerin birbirine göre seviyesi `src/audio/sounds.ts`
+  içindeki `VOLUMES` tablosundadır.
+- **Gizli tarih ekranı:** Kod ve mesaj `src/calculator/secretCode.ts` içindedir.

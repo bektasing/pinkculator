@@ -2,6 +2,7 @@ import { hexToRgb, rgbToCss, type RGB } from '../../effects/color';
 import { drawHeartScaled } from '../../effects/heartSprite';
 import { BURSTS } from '../../effects/particles';
 import { prefersReducedMotion } from '../../effects/reducedMotion';
+import { playSound } from '../../audio/sounds';
 import { impactLight } from '../../platform/haptics';
 import type { SceneFactory } from '../shared/types';
 import { createState, launchSpeed, step, type BounceState, type BounceWorld } from './physics';
@@ -220,6 +221,8 @@ export const createBounceScene: SceneFactory = ({ particles, gameOver, insets })
         scorePop.velocity = prefersReducedMotion() ? 6 : 14;
         particles.burst(state.x, world.paddleTop, BURSTS.pop);
         impactLight();
+        // Oyun hızlandıkça "boing" de azıcık incelir.
+        playSound('boing', { rate: 1 + Math.min(state.hits, 40) * 0.004, jitter: 0.03 });
 
         const nextStage = Math.floor(state.hits / POINTS_PER_STAGE) % BACKGROUNDS.length;
         if (nextStage !== stage) {

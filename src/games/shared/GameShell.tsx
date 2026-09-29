@@ -1,5 +1,6 @@
 import { AnimatePresence, motion } from 'motion/react';
 import { useCallback, useEffect, useRef, useState, type PointerEvent, type ReactNode } from 'react';
+import { playSound } from '../../audio/sounds';
 import { HeartParticles } from '../../effects/particles';
 import { impactHeavy, impactMedium, notifySuccess } from '../../platform/haptics';
 import { onAppPause, onAppResume } from '../../platform/lifecycle';
@@ -100,6 +101,7 @@ export function GameShell({ gameId, createScene, onExit, showBest = true, turnBa
         if (isNew) {
           impactHeavy();
           notifySuccess();
+          playSound('record');
         } else {
           impactMedium();
         }
