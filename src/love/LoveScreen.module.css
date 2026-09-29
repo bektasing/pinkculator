@@ -1,12 +1,17 @@
 /* Toz pembe → krem; menü ve hesap makinesi zeminleriyle aynı aile */
 .root {
+  --screen-h: var(--app-height, 100vh);
+  /* Alttaki "Kapat" için ayrılan alan */
+  --close-space: calc(max(var(--safe-bottom), 16px) + 76px);
   position: relative;
   width: 100%;
   height: 100%;
   overflow: hidden;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
+  padding: calc(max(var(--safe-top), 24px) + 12px) 0 var(--close-space);
   background:
     radial-gradient(70% 45% at 50% 50%, rgba(255, 246, 240, 0.75) 0%, transparent 100%),
     linear-gradient(180deg, var(--bg-menu) 0%, #f5d6d6 52%, var(--bg-calc) 100%);
@@ -22,21 +27,23 @@
   display: block;
 }
 
-/* Fotoğraf + mesaj, ekranın ortasında; kalpler bu alanın dışında durur */
+/* Fotoğraf + mesaj, ortada; kalpler bu alanın dışında durur */
 .content {
   position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: calc(22 * var(--u));
-  margin-top: calc(-2 * var(--u));
+  gap: calc(20 * var(--u));
+  max-width: 100%;
+  max-height: 100%;
 }
 
 /* Krem, puffy çerçeve (menü kartlarıyla aynı dil), hafif eğik */
 .frame {
-  --photo-w: min(calc(236 * var(--u)), calc(var(--app-height, 100vh) * 0.4 * 0.75));
+  flex: 0 1 auto;
+  min-height: 0;
   padding: calc(9 * var(--u));
-  border-radius: calc(30 * var(--u));
+  border-radius: calc(28 * var(--u));
   background:
     radial-gradient(90% 70% at 30% 10%, #fffdf8 0%, transparent 70%),
     linear-gradient(180deg, #fffaf2, var(--card) 55%, var(--key-num-bottom));
@@ -47,29 +54,58 @@
     0 20px 32px -8px rgba(201, 110, 124, 0.5);
 }
 
+/* Fotoğraf oranı korunur (dikey, yatay, kare); ekran küçükse küçülür */
 .photo {
   display: block;
-  width: var(--photo-w);
-  height: calc(var(--photo-w) * 4 / 3);
-  object-fit: cover;
-  border-radius: calc(22 * var(--u));
+  width: auto;
+  height: auto;
+  max-width: min(calc(280 * var(--u)), 320px);
+  max-height: calc(var(--screen-h) * 0.44);
+  border-radius: calc(20 * var(--u));
   pointer-events: none;
   -webkit-user-drag: none;
 }
 
 .message {
   position: relative;
+  flex: 0 0 auto;
   margin: 0;
-  padding: 0 calc(24 * var(--u));
+  max-width: calc(330 * var(--u));
+  padding: 0 calc(12 * var(--u));
   text-align: center;
   color: var(--ink);
-  font-size: min(calc(46 * var(--u)), 56px, calc(var(--app-height, 100vh) * 0.06));
   font-weight: var(--weight-extrabold);
-  line-height: 1.08;
+  line-height: 1.16;
   letter-spacing: -0.01em;
+  text-wrap: balance;
   text-shadow:
     0 3px 0 rgba(237, 185, 197, 0.9),
     0 10px 28px rgba(201, 110, 124, 0.35);
+}
+
+.short {
+  font-size: min(calc(42 * var(--u)), calc(var(--screen-h) * 0.06), 52px);
+}
+
+.medium {
+  font-size: min(calc(29 * var(--u)), calc(var(--screen-h) * 0.042), 36px);
+}
+
+.long {
+  font-size: min(calc(25 * var(--u)), calc(var(--screen-h) * 0.036), 30px);
+}
+
+/* Fotoğrafsız: mesaj daha büyük ve geniş */
+.noPhoto .message {
+  max-width: calc(350 * var(--u));
+}
+
+.noPhoto .short {
+  font-size: min(calc(56 * var(--u)), calc(var(--screen-h) * 0.075), 64px);
+}
+
+.noPhoto .medium {
+  font-size: min(calc(34 * var(--u)), calc(var(--screen-h) * 0.05), 42px);
 }
 
 .messageInner {

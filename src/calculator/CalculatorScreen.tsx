@@ -13,13 +13,13 @@ import {
   type CalculatorAction,
 } from './engine';
 import { Keypad } from './Keypad';
-import { isSecretEntry } from './secretCode';
+import { findSecretEntry, trackTypedDigits, type SecretEntry } from './secretCode';
 import styles from './CalculatorScreen.module.css';
 
 interface CalculatorScreenProps {
   onOpenMenu: (origin: { x: number; y: number }) => void;
-  /** Gizli kod yazılıp = kısa basıldığında (bkz. secretCode.ts) */
-  onOpenSecret: (origin: { x: number; y: number }) => void;
+  /** Gizli kodlardan biri yazılıp = kısa basıldığında (bkz. secretCode.ts) */
+  onOpenSecret: (origin: { x: number; y: number }, entry: SecretEntry) => void;
 }
 
 /** Patlamadan sonra gizli ekrana geçişe kadar kısa bekleme (menü açılışıyla aynı) */
@@ -29,10 +29,13 @@ export function CalculatorScreen({ onOpenMenu, onOpenSecret }: CalculatorScreenP
   const [state, setState] = useState(initialState);
   // Durum ref'te de tutulur: çok hızlı art arda basışlarda her tuş en güncel duruma uygulanır.
   const stateRef = useRef(state);
+  // Basılan rakamlar (gizli kodlar için; ekran baştaki sıfırı göstermez)
+  const typedRef = useRef('');
 
   const dispatch = useCallback((action: CalculatorAction) => {
     const previous = stateRef.current;
     const next = calculatorReducer(previous, action);
+    typedRef.current = trackTypedDigits(typedRef.current, previous, action);
     stateRef.current = next;
     setState(next);
     return !previous.error && next.error;
@@ -54,13 +57,14 @@ export function CalculatorScreen({ onOpenMenu, onOpenSecret }: CalculatorScreenP
   const handleEquals = useCallback(
     (origin: { x: number; y: number }) => {
       if (secretOpening.current) return;
-      if (isSecretEntry(stateRef.current)) {
+      const secret = findSecretEntry(stateRef.current, typedRef.current);
+      if (secret) {
         // Normal hesaplama yapılmaz: güçlü titreşim, büyük kalp patlaması, sonra gizli ekran.
         secretOpening.current = true;
         impactHeavy();
         playSound('unlock');
         heartBurst(origin.x, origin.y, 'grand');
-        window.setTimeout(() => onOpenSecret(origin), SECRET_DELAY_MS);
+        window.setTimeout(() => onOpenSecret(origin, secret), SECRET_DELAY_MS);
         return;
       }
       playSound('ding');

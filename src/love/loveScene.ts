@@ -66,6 +66,8 @@ function layoutHearts(width: number, height: number, keepOut: KeepOut | null): S
 
 export interface LoveScene {
   resize: (width: number, height: number) => void;
+  /** Fotoğraf/yazı alanı değişince (ör. fotoğraf yüklenince) sabit kalpleri yeniden yerleştir */
+  relayout: () => void;
   update: (dt: number) => void;
   render: (ctx: CanvasRenderingContext2D) => void;
   dispose: () => void;
@@ -95,6 +97,9 @@ export function createLoveScene(keepOut: () => KeepOut | null = () => null): Lov
         seededFloat = true;
         for (let i = 0; i < (reduced ? 3 : 7); i++) spawn(height * (0.45 + Math.random() * 0.6));
       }
+    },
+    relayout() {
+      hearts = layoutHearts(width, height, keepOut());
     },
     update(dt) {
       time += dt;

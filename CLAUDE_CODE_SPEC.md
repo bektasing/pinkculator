@@ -399,16 +399,23 @@ Zevkli ama abartısız, "arka planda kalan" sesler. Uygulama içinde ses ayarı 
 - Sesler mevcut titreşim/parçacık tetikleyicilerine eklenir, onların yerine geçmez; testler bozulmaz.
 - Rapor: seslerin kaynağı (sentez mi, hangi kaynak), dosya boyutları, toplam eklenen boyut.
 
-### 8B — Gizli tarih ekranı
+### 8B — Gizli tarih ekranları
 
-3 saniyelik menü mekanizmasından tamamen bağımsız ikinci gizli özellik.
+3 saniyelik menü mekanizmasından tamamen bağımsız ikinci gizli özellik. Birden fazla gizli tarih vardır; her birinin kendi kodu, fotoğrafı ve mesaj listesi olur.
 
-- **Tetikleme:** Ekrana gizli kod (`29062023`) yazılıp `=` **kısa** basılırsa ve bekleyen bir işlem yoksa (`+ − × ÷` zincirine girilmemişse) normal hesaplama yapılmaz, "Seni seviyorum" ekranı açılır.
-- **Görünüm:** Tam ekran, toz pembe / gül kurusu / krem temasıyla uyumlu. Ortada büyük, sıcak "Seni seviyorum" (Nunito, kalın). Mesajın üstünde, krem puffy çerçevede ikimizin fotoğrafı (`src/assets/photos/us.jpg`, 3:4 dikey). Etrafta farklı boyut ve tonlarda kalpler: bazıları yavaşça yukarı süzülür, bazıları sabit durur ve fotoğraf/yazının üstüne binmez (mevcut kalp çizimi ve parçacık sistemi kullanılır).
-- **Açılış:** Güçlü titreşim + geniş kalp patlaması (= tuşu patlamasıyla tutarlı), ardından yumuşak geçiş.
+| Kod | Anlamı | Fotoğraf | Mesajlar |
+|---|---|---|---|
+| `29062023` | Tanışma tarihi | `design/secrets/29062023.jpg` | "Seni seviyorum." · "O gün seninle tanıştığım için hâlâ şanslı hissediyorum." · "Bu hesap makinesi çok şey hesaplayabilir ama seni ne kadar sevdiğimi asla." · "İyi ki o gün karşıma çıktın." |
+| `08072008` | Onun doğum günü | `design/secrets/08072008.jpg` | "İyi ki doğdun aşkım. Dünyaya geldiğin gün, benim de en şanslı günlerimden biri oldu." · "Bugün senin günün. Seni kutluyorum, seni seviyorum." · "Sen doğduğun için dünya biraz daha güzel bir yer." · "Nice mutlu, sağlıklı ve birlikte geçireceğimiz yaşlara." |
+| `25062007` | Benim doğum günüm | `design/secrets/25062007.jpg` | "25 Haziran 2007'de doğdum, ama hayatımın en güzel kısmı seninle başladı." · "Bugün benim doğum günüm ama asıl hediye seni tanımak oldu." · "O gün doğdum ki bir gün sana denk geleyim." |
+
+- **Tetikleme:** Kodlardan biri tam olarak yazılıp `=` **kısa** basılırsa ve bekleyen bir işlem yoksa (`+ − × ÷` zincirine girilmemişse) normal hesaplama yapılmaz, o girişin ekranı açılır. Hesap makinesi baştaki sıfırı ekranda göstermediği için (`08072008` → ekranda `8.072.008`) eşleşme basılan tuşlarla yapılır.
+- **Rastgele mesaj:** Ekran her açıldığında o girişin listesinden rastgele biri; son gösterilen hariç tutulur (art arda aynı mesaj gelmez). Her girişin geçmişi ayrıdır; uygulama açık kaldığı sürece hatırlanır, diske yazılmaz.
+- **Fotoğraf:** Dosya `design/secrets/` içinde yoksa (veya bozuksa) uygulama çökmez; ekran sadece mesaj + kalplerle açılır. Dosya ekleyince yeniden derlemek gerekir.
+- **Görünüm (tek bileşen, üçü için aynı):** Toz pembe / gül kurusu / krem tema. Fotoğraf üst-ortada, krem puffy çerçeveli kartta (menü kartlarıyla aynı dil), oranı korunur. Altında mesaj (Nunito, kalın, ortalı; uzun mesajda yazı küçülür). Kalpler fotoğrafın ve yazının arkasında/etrafında kalır, üstlerine binmez; bazıları yavaşça yukarı süzülür, bazıları sabit durur (mevcut kalp çizimi ve parçacık sistemi). 360×640'ta da fotoğraf + mesaj + Kapat sığar.
+- **Açılış:** Güçlü titreşim + geniş kalp patlaması + açılış sesi, ardından yumuşak geçiş.
 - **Kapatma:** Diğer overlay'lerle tutarlı küçük bir "Kapat" butonu ve Android geri tuşu hesap makinesine döndürür; dönünce hesap makinesi sıfırlanır.
 - Menüyle çakışmaz: bu ekran açıkken `=`'e uzun basılması hiçbir şey yapmaz.
 - Uygulamada bu özelliğe dair hiçbir ipucu yok.
-- **Kod organizasyonu:** Gizli kod ve mesaj tek dosyada, ayrı sabitler (`src/calculator/secretCode.ts`); tek satır değiştirerek güncellenebilir.
-- Rapor: görsel farklar (varsa) ve dokunarak adım adım test.
-
+- **Kod organizasyonu:** `src/calculator/secretCode.ts` içinde tek bir `SECRET_ENTRIES` dizisi, her madde `{ code, photo, messages }`. Yeni tarih = yeni madde.
+- **Testler:** Üç kodun doğru girişi tetiklemesi, bekleyen işlemde tetiklenmemesi, mesajların art arda tekrar etmemesi.

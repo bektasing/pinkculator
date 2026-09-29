@@ -1,3 +1,4 @@
+import type { SecretEntry } from '../calculator/secretCode';
 import type { GameId } from '../games/shared/types';
 
 export type { GameId };
@@ -15,5 +16,5 @@ export type Screen =
   | { name: 'calculator' }
   | { name: 'menu'; origin: Point }
   | { name: 'game'; id: GameId; origin: Point; gameOrigin: Point }
-  /** Gizli tarih ekranı (bkz. calculator/secretCode.ts) */
-  | { name: 'love'; origin: Point };
+  /** Gizli tarih ekranı (bkz. calculator/secretCode.ts); mesaj açılışta bir kez seçilir */
+  | { name: 'love'; origin: Point; entry: SecretEntry; message: string };

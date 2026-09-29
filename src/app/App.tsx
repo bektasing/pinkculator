@@ -1,6 +1,7 @@
 import { AnimatePresence, motion, type Transition } from 'motion/react';
 import { useCallback, useEffect, useState } from 'react';
 import { CalculatorScreen } from '../calculator/CalculatorScreen';
+import { nextSecretMessage, type SecretEntry } from '../calculator/secretCode';
 import { HeartBurstLayer } from '../effects/HeartBurstLayer';
 import { GameScreen } from '../games/GameScreen';
 import { LoveScreen } from '../love/LoveScreen';
@@ -49,7 +50,10 @@ export function App() {
       setScreen((current) => (current.name === 'menu' ? { name: 'game', id, origin: current.origin, gameOrigin } : current)),
     [],
   );
-  const openSecret = useCallback((origin: Point) => setScreen({ name: 'love', origin }), []);
+  const openSecret = useCallback((origin: Point, entry: SecretEntry) => {
+    const message = nextSecretMessage(entry);
+    setScreen({ name: 'love', origin, entry, message });
+  }, []);
   const closeSecret = useCallback(() => {
     setCalculatorKey((key) => key + 1);
     setScreen({ name: 'calculator' });
@@ -82,7 +86,7 @@ export function App() {
   );
 
   const menuOrigin = screen.name === 'menu' || screen.name === 'game' ? screen.origin : null;
-  const loveOrigin = screen.name === 'love' ? screen.origin : null;
+  const love = screen.name === 'love' ? screen : null;
   const game = screen.name === 'game' ? screen : null;
 
   return (
@@ -116,9 +120,9 @@ export function App() {
       </AnimatePresence>
 
       <AnimatePresence>
-        {loveOrigin && (
-          <motion.div key="love" className={styles.screen} style={{ zIndex: 4 }} {...revealProps(loveOrigin)}>
-            <LoveScreen onClose={closeSecret} />
+        {love && (
+          <motion.div key="love" className={styles.screen} style={{ zIndex: 4 }} {...revealProps(love.origin)}>
+            <LoveScreen entry={love.entry} message={love.message} onClose={closeSecret} />
           </motion.div>
         )}
       </AnimatePresence>

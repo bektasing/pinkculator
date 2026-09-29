@@ -125,4 +125,8 @@ Bu dosya telefona yüklenemez.
   `node scripts/generate-sounds.mjs` çalıştır. Dosyalar 4 bit IMA ADPCM WAV'dır; uygulama
   bunları kendi çözer (`src/audio/wav.ts`). Seslerin birbirine göre seviyesi `src/audio/sounds.ts`
   içindeki `VOLUMES` tablosundadır.
-- **Gizli tarih ekranı:** Kod ve mesaj `src/calculator/secretCode.ts` içindedir.
+- **Gizli tarih ekranları:** Kodlar, fotoğraf adları ve mesaj listeleri `src/calculator/secretCode.ts`
+  içindeki `SECRET_ENTRIES` dizisindedir; yeni tarih için bir madde eklemek yeterli. Fotoğraflar
+  `design/secrets/<kod>.jpg` (ör. `29062023.jpg`). Uzun kenarı ~1200 px'e küçültülmüş JPEG önerilir;
+  dosya yoksa ekran fotoğrafsız açılır. Fotoğraf ekleyip değiştirdikten sonra `npm run build` ve
+  `npx cap sync android` gerekir.
