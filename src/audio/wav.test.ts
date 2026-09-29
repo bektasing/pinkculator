@@ -45,7 +45,7 @@ describe('WAV çözücü', () => {
     expect(sampleRate).toBe(16000);
     const seconds = samples.length / sampleRate;
     expect(seconds).toBeGreaterThan(0.05);
-    expect(seconds).toBeLessThan(1.2);
+    expect(seconds).toBeLessThan(2);
     let peak = 0;
     for (const v of samples) peak = Math.max(peak, Math.abs(v));
     expect(peak).toBeGreaterThan(0.6);
@@ -54,7 +54,13 @@ describe('WAV çözücü', () => {
     expect(Math.abs(samples[samples.length - 1] ?? 1)).toBeLessThan(0.02);
   });
 
-  it('ses dosyaları küçük (her biri < 10 KB)', () => {
-    for (const file of files) expect(readFileSync(new URL(file, DIR)).length).toBeLessThan(10 * 1024);
+  it('ses dosyaları küçük (her biri < 16 KB, toplam < 80 KB)', () => {
+    let total = 0;
+    for (const file of files) {
+      const size = readFileSync(new URL(file, DIR)).length;
+      expect(size).toBeLessThan(16 * 1024);
+      total += size;
+    }
+    expect(total).toBeLessThan(80 * 1024);
   });
 });

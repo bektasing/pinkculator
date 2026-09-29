@@ -122,7 +122,8 @@ Bu dosya telefona yüklenemez.
   (`values/styles.xml`). Fontlar yüklenip ilk kare çizilince JS kapatır (`src/platform/splash.ts`).
 - **Sesler:** `src/assets/sounds/*.wav` dosyaları `scripts/generate-sounds.mjs` ile sentezlenir
   (dış kaynak veya örnek kullanılmaz). Sesi değiştirmek için betikteki ilgili fonksiyonu düzenleyip
-  `node scripts/generate-sounds.mjs` çalıştır. Dosyalar 4 bit IMA ADPCM WAV'dır; uygulama
+  `node scripts/generate-sounds.mjs` çalıştır. Üç varyasyon var (`sicak` varsayılan, `cam`, `ahsap`):
+  `--variant cam` ile uygulamaya yazılır, `--preview` ile hepsi `design/sound-preview/` altına dinlemek için yazılır. Dosyalar 4 bit IMA ADPCM WAV'dır; uygulama
   bunları kendi çözer (`src/audio/wav.ts`). Seslerin birbirine göre seviyesi `src/audio/sounds.ts`
   içindeki `VOLUMES` tablosundadır.
 - **Gizli tarih ekranları:** Kodlar, fotoğraf adları ve mesaj listeleri `src/calculator/secretCode.ts`

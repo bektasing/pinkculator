@@ -47,18 +47,22 @@ const URLS: Record<SoundName, string> = {
   record: recordUrl,
 };
 
-/** Seslerin birbirine göre seviyesi: sık çalanlar en kısık, kutlamalar biraz daha belirgin. */
+/**
+ * Seslerin birbirine göre seviyesi: sık çalanlar en kısık, kutlamalar biraz daha belirgin.
+ * Telefon hoparlörünün pes sesleri kıstığı hesaba katılarak dengelendi
+ * (scripts/generate-sounds.mjs'in "telefonda" ölçümü).
+ */
 const VOLUMES: Record<SoundName, number> = {
-  tap: 0.32,
-  pulse: 0.3,
-  ding: 0.46,
+  tap: 0.5,
+  pulse: 0.34,
+  ding: 0.4,
   place: 0.4,
-  merge: 0.36,
-  boing: 0.38,
-  perfect: 0.44,
-  unlock: 0.5,
-  record: 0.52,
-  win: 0.55,
+  merge: 0.44,
+  boing: 0.4,
+  perfect: 0.46,
+  unlock: 0.56,
+  record: 0.66,
+  win: 0.56,
 };
 
 /** Aynı sesin aynı anda en fazla kaç kopyası çalar */
@@ -66,6 +70,8 @@ const MAX_VOICES: Partial<Record<SoundName, number>> = { tap: 4, pulse: 2, place
 const DEFAULT_MAX_VOICES = 2;
 /** Tüm uygulamanın genel seviyesi ("arka planda kalan" his) */
 const MASTER_GAIN = 0.8;
+/** Ana çıkışta yumuşak alçak geçiren: sıkıştırmanın tizlerdeki cızırtısını keser (sesler zaten bunun altında) */
+const MASTER_LOWPASS_HZ = 6000;
 /** Susturulan kopyanın sönme süresi (s) */
 const STEAL_FADE_S = 0.012;
 
@@ -131,9 +137,13 @@ function ensureContext(): void {
   compressor.ratio.value = 4;
   compressor.attack.value = 0.003;
   compressor.release.value = 0.12;
+  const smooth = context.createBiquadFilter();
+  smooth.type = 'lowpass';
+  smooth.frequency.value = MASTER_LOWPASS_HZ;
+  smooth.Q.value = 0.5;
   master = context.createGain();
   master.gain.value = MASTER_GAIN;
-  master.connect(compressor).connect(context.destination);
+  master.connect(smooth).connect(compressor).connect(context.destination);
   for (const name of decoded.keys()) createBuffer(name);
 }
 
